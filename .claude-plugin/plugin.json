@@ -1,6 +1,6 @@
 {
   "name": "model-advisor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Shows the model that fits each prompt (haiku/sonnet/opus) above the prompt and can auto-switch to it.",
   "types": "./types/index.d.ts",
   "userConfig": {
