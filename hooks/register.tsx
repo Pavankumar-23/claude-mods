@@ -33,7 +33,6 @@ export const register: Register = (on, options) => {
     await update($, isHidden, () => false)
 
     const isMatch = tierOf(current) === tier
-    $.ui.status(isMatch ? `model ✓ ${tier}` : `model → ${tier}`)
 
     const auto = (await read($, isAuto)) ?? defaultAuto
     if (auto && !isMatch) {
@@ -48,22 +47,12 @@ export const register: Register = (on, options) => {
   })
 
   on('session.start', ($, e, next) => {
-    $.ui.status('model-advisor loaded')
     return next(e)
   })
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     const a = await read($, advice)
-    if (e.props.hasSurvey || (await read($, isHidden))) return next(e)
-
-    if (a === null) {
-      const { Box: B, Text: T } = $.ui.resolve(e)
-      return (
-        <B borderStyle="round" paddingX={1}>
-          <T dimColor>model-advisor: ready, suggests a model after your next prompt</T>
-        </B>
-      )
-    }
+    if (a === null || e.props.hasSurvey || (await read($, isHidden))) return next(e)
 
     const auto = (await read($, isAuto)) ?? defaultAuto
     const cur = tierOf(a.current)
@@ -71,22 +60,22 @@ export const register: Register = (on, options) => {
     const { Box, Button, Text } = $.ui.resolve(e)
 
     return (
-      <Box borderStyle="round" borderColor={isMatch ? 'success' : 'warning'} paddingX={1} gap={1}>
-        <Text bold color={isMatch ? 'success' : 'warning'}>
-          {isMatch ? '✓' : '→'} {a.tier}
+      <Box>
+        <Text color={isMatch ? 'success' : 'warning'}>
+          {isMatch ? '✓' : '→'} {a.tier}{' '}
         </Text>
-        <Text dimColor>{a.why}</Text>
-        <Box flexGrow={1} />
+        <Text dimColor>({a.why}) </Text>
         {TIERS.map(t => (
           <Button
             key={t}
-            label={`${t === cur ? '●' : '○'} ${t}${t === a.tier ? ' ★' : ''}`}
+            label={`${t === cur ? '●' : '○'} ${t}`}
             onPress={() => switchTo($, t)}
           />
         ))}
+        <Text> </Text>
         <Button
           key="auto"
-          label={`auto: ${auto ? 'on' : 'off'}`}
+          label={`auto ${auto ? 'on' : 'off'}`}
           onPress={() => update($, isAuto, v => !(v ?? defaultAuto))}
         />
         <Button key="hide" label="✕" onPress={() => update($, isHidden, () => true)} />
