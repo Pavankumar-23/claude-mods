@@ -1,0 +1,14 @@
+{
+  "name": "model-advisor",
+  "version": "0.1.0",
+  "description": "Shows the model that fits each prompt (haiku/sonnet/opus) above the prompt and can auto-switch to it.",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "autoSwitch": {
+      "type": "boolean",
+      "title": "Auto-switch model",
+      "description": "Switch the session model to the recommended one when a prompt is submitted.",
+      "default": false
+    }
+  }
+}

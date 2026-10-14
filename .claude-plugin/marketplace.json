@@ -1,1 +1,5 @@
-
+﻿{
+  "name": "pavan-mods",
+  "owner": { "name": "Pavan Kumar" },
+  "plugins": [{ "name": "model-advisor", "source": "./" }]
+}
